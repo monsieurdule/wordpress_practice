@@ -17,15 +17,16 @@ then
         exit
     fi
     echo "Please enter database name (e.g. wordpress_db)"
-    read dbdir
-    echo "/var/lib/mysql/$dbdir"
-    if [ -d /var/lib/mysql/$dbdir ]
-    then
-        tar -czf wpdb.tar.gz /var/lib/mysql/$dbdir #/var/lib/mysql/ is default directory
-    else
-        echo "Directory doesn't exist"
-        exit
-    fi
+    read dbname
+    #echo "/var/lib/mysql/$dbdir"
+    #if [ -d /var/lib/mysql/$dbdir ]
+    #then
+    #    tar -czf wpdb.tar.gz /var/lib/mysql/$dbdir #/var/lib/mysql/ is default directory
+    #else
+    #    echo "Directory doesn't exist"
+    #    exit
+    #fi
+    mysqldump -u root $dbname > $dbname\_backup.sql
 fi
 
 if [ "$1" == "deploy" ]
@@ -37,12 +38,13 @@ if [ "$1" == "deploy" ]
         echo "Please enter .tar.gz file name that you want to deploy (e.g. wp.tar.gz)"
         read tarfile
         tar -xzvf $tarfile $dir
-        echo "Please specify database .tar.gz file that you want to deploy (e.g. wpdb.tar.gz)"
-        read dbtarfile
-        echo "Enter new database name"
+        echo "Please specify database .sql file that you want to deploy (e.g. *_backup.sql)"
+        read dbbackup
+        echo "Enter database name to deploy to"
         read dbname
-        echo "Extracting to /var/lib/mysql/$dbname"
-        tar -xzvf $dbtarfile --directory /var/lib/mysql/$dbname 
+        echo "Extracting database..."
+        #tar -xzvf $dbtarfile --directory /var/lib/mysql/$dbname 
+        mysql -u root $dbname < $dbbackup
     else
         echo "Directory doesn't exist"
         exit
