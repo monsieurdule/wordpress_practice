@@ -1,0 +1,8 @@
+1- Instaliras lamp ceo i dignes wordpress i phpmyadmin preko reverznog proxya
+2- Zipujes ceo folder i napravis skriptu da autodeploy sve iz basha
+3- Exposovati wordpress sajt spolja (vhost) i dodati domen i dns zapis
+4-Instalirati sertifikate i ukljuciti automatski renew
+5-Pogasiti ssh pristupe svima preko sifre, samo ostaviti meni i tebi putem kljuca
+6- IPTables pogasiti sva firewall pravila i pustiti samo ssh ka nasim IP adresama
+7- Podizanje mail servera i slanje mailova putem web clienta, nakon toga IMAP putem desktop clienta
+8- Sve ove taskove automatizovati putem ansibla ili basha
