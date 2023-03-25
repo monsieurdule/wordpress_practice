@@ -5,8 +5,7 @@ then
     echo "Please specify one command that you want to use (e.g. archive)"
 fi
 
-if [ "$1" == "archive" ]
-then
+archive_directory () {
     echo "Please enter directory that you want to archive (e.g. /var/www/wordpress)"
     read dir
     if [ -d $dir ] #check if directory exists
@@ -16,17 +15,18 @@ then
         echo "Directory doesn't exist"
         exit
     fi
+}
+
+mysql_backup () {
     echo "Please enter database name (e.g. wordpress_db)"
     read dbname
-    #echo "/var/lib/mysql/$dbdir"
-    #if [ -d /var/lib/mysql/$dbdir ]
-    #then
-    #    tar -czf wpdb.tar.gz /var/lib/mysql/$dbdir #/var/lib/mysql/ is default directory
-    #else
-    #    echo "Directory doesn't exist"
-    #    exit
-    #fi
     mysqldump -u root $dbname > $dbname\_backup.sql
+}
+
+if [ "$1" == "archive" ]
+then
+    archive_directory
+    mysql
 fi
 
 if [ "$1" == "deploy" ]
