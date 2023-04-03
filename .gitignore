@@ -1,3 +1,5 @@
 *.tar
 *.tar.gz
 *.save
+wp-data/
+db_data/
