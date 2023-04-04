@@ -3,3 +3,5 @@
 *.save
 wp-data/
 db_data/
+certbot/
+wp-logs/

@@ -5,6 +5,7 @@ services:
   db:
     image: mysql:5.7
     # image: mysql:5.7 indicates the MySQL database container image from Docker Hub used in this installation.
+    container_name: database
     volumes:
       - ./db_data:/var/lib/mysql
     restart: always
@@ -15,21 +16,39 @@ services:
       MYSQL_PASSWORD: 123
       # Previous four lines define the main variables needed for the MySQL container to work: database, database username, database user password, and the MySQL root password.
   wordpress:
+    container_name: wordpress
     depends_on:
       - db
+      # - certbot
     image: wordpress:latest
     restart: always
     # Restart line controls the restart mode, meaning if the container stops running for any reason, it will restart the process immediately.
     ports:
       - "80:80"
+      - "443:443"
       # The previous line defines the port that the WordPress container will use. After successful installation, the full path will look like this: http://localhost:8000
     environment:
       WORDPRESS_DB_HOST: db:3306
       WORDPRESS_DB_USER: mysqluser
       WORDPRESS_DB_PASSWORD: 123
       WORDPRESS_DB_NAME: wp_db
+      # WORDPRESS_HTTPS: "true"
 # Similar to MySQL image variables, the last four lines define the main variables needed for the WordPress container to work properly with the MySQL container.
     volumes:
+      - ./wp-data:/var/www/html
+      - ./wp-logs:/var/log/apache2
+      - ./certbot/conf:/etc/letsencrypt
+      # - ./certbot/logs:/var/log/letsencrypt
+      # - ./certbot/data:/var/www/certbot
+  certbot:
+    depends_on: 
+      - wordpress
+    container_name: certbot
+    image: certbot/certbot:latest
+    command: certonly --webroot --webroot-path=/var/www/html --email dusan.jovanovic@qcerris.com --agree-tos -d dusan.qcerris.cloud
+    volumes:
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/logs:/var/log/letsencrypt
       - ./wp-data:/var/www/html
 # volumes:
 #   db_data:
