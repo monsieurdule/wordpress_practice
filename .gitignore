@@ -5,3 +5,6 @@ wp-data/
 db_data/
 certbot/
 wp-logs/
+grafana/
+wp-conf/
+aws*
