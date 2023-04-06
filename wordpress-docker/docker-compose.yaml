@@ -38,6 +38,7 @@ services:
       - ./wp-data:/var/www/html
       - ./wp-logs:/var/log/apache2
       - ./certbot/conf:/etc/letsencrypt
+      - ./wp-conf/apache2:/etc/apache2
       # - ./certbot/logs:/var/log/letsencrypt
       # - ./certbot/data:/var/www/certbot
   certbot:
@@ -50,5 +51,22 @@ services:
       - ./certbot/conf:/etc/letsencrypt
       - ./certbot/logs:/var/log/letsencrypt
       - ./wp-data:/var/www/html
+  grafana:
+    depends_on:
+      - wordpress
+    container_name: grafana
+    image: grafana/grafana-oss:latest
+    restart: always
+    ports:
+      - "3000:3000"
+    # volumes:
+      # - ./grafana/data:/var/lib/grafana
+      # - ./grafana/logs:/var/log/grafana
+      # - ./grafana/provisioning:/etc/grafana/provisioning
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: 123
+      GF_SERVER_ROOT_URL: https://dusan.qcerris.cloud
+      # GF_INSTALL_PLUGINS: grafana-clock-panel,grafana-simple-json-datasource
 # volumes:
 #   db_data:
